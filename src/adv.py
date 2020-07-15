@@ -1,10 +1,13 @@
+import sys
+
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons."),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -38,6 +41,38 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
+game_started = False
+name = "Player"
+def start_game():
+    global name
+    name = input("Welcome to the Game! Enter your avatar's name:\n")
+
+    global game_started
+    game_started = True
+    return name
+
+start_game()
+
+player = Player('outside', name)
+
+valid_directions = ["n", "e", "s", 'w']
+
+while game_started == True:
+    curr_room = player.curr_loc
+    cmd = input(f"{player.name}, your current location is {curr_room}.\n{room[curr_room].description} Which direction would you like to go next?\n")
+
+    if len(cmd.split()) == 1:
+        if cmd[0].lower() in valid_directions:
+            print(cmd, cmd[0].lower())
+        elif cmd[0].lower() == 'q':
+            print("\nGoodbye")
+            sys.exit()
+        else:
+            print(f"{cmd.capitalize()} is not a valid direction. Try North, South, East, or West")
+
+    else: 
+        print(cmd.split())
+
 
 # Write a loop that:
 #
